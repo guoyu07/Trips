@@ -4,19 +4,25 @@ from bs4 import BeautifulSoup
 
 BASE_URL = 'http://www.imdb.com'
 SEARCH_URL = '/find?ref_=nv_sr_fn&q={}'
-TOP_RATED_URL = '/chart/top'
 
 
-def get_top_rated_movieIDs(numMovies = 10):
+def get_movieIDs_from_list(url, numMovies):
     if numMovies < 1:
         return []
-    result = requests.get(BASE_URL + TOP_RATED_URL)
+    result = requests.get(url)
     soup = BeautifulSoup(result.text, "lxml")
     elements = [i for i in soup.find('tbody', 'lister-list')('td', 'titleColumn')]
     if numMovies >= len(elements):
         numMovies = len(elements)-1;
 
     return [i('a')[0]['href'].split('/')[2] for i in elements[0:numMovies]]
+
+
+def get_top_rated_movieIDs(numMovies = 10):
+    return get_movieIDs_from_list(BASE_URL + '/chart/top', numMovies)
+
+def get_most_popular_movieIDs(numMovies = 10):
+    return get_movieIDs_from_list(BASE_URL + '/chart/moviemeter', numMovies)
 
 def get_search_url(searchAfter):
     searchAfter = searchAfter.lower()
@@ -69,4 +75,4 @@ if __name__ == '__main__':
 
     #for location in get_locations_from_movieID(gotID):
     #    print(location)
-    print(get_top_rated_movieIDs())
+    print(get_title_from_movieUrl(get_url_from_movieID(get_most_popular_movieIDs(1)[0])))
