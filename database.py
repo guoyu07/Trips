@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import peewee
 from peewee import *
 import skyscanner.py
@@ -58,7 +59,6 @@ def add_trip(MovieID, locations, MovieName, home, date):
 			Location = temp
 			)
 		prize = skyscanner.get_prize(prev, location, date)
-		link = skyscanner.get_link(prev, location, date)
 
 		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, link = link, prize = prize)
 		Flight_Relation = TripFlightRelation(
