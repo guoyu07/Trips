@@ -4,6 +4,19 @@ from bs4 import BeautifulSoup
 
 BASE_URL = 'http://www.imdb.com'
 SEARCH_URL = '/find?ref_=nv_sr_fn&q={}'
+TOP_RATED_URL = '/chart/top'
+
+
+def get_top_rated_movieIDs(numMovies = 10):
+    if numMovies < 1:
+        return []
+    result = requests.get(BASE_URL + TOP_RATED_URL)
+    soup = BeautifulSoup(result.text, "lxml")
+    elements = [i for i in soup.find('tbody', 'lister-list')('td', 'titleColumn')]
+    if numMovies >= len(elements):
+        numMovies = len(elements)-1;
+
+    return [i('a')[0]['href'].split('/')[2] for i in elements[0:numMovies]]
 
 def get_search_url(searchAfter):
     searchAfter = searchAfter.lower()
@@ -13,8 +26,8 @@ def get_search_url(searchAfter):
 def search_movieIDs(searchAfter):
     result = requests.get(get_search_url(searchAfter))
     soup = BeautifulSoup(result.text, "lxml")
-    resultEntries = soup.find('table', 'findList').find_all('tr')
-    return [i.find_all('a')[0]['href'].split('/')[2] for i in resultEntries]
+    resultEntries = soup.find('table', 'findList')('tr')
+    return [i('a')[0]['href'].split('/')[2] for i in resultEntries]
 
 def get_movie_from_movieID(mid):
     url = BASE_URL + "/title/" + mid;
@@ -29,7 +42,6 @@ def get_movie_from_movieID(mid):
 
 def get_url_from_movieID(mid):
     return BASE_URL + "/title/" + mid;
-
 
 def get_title_from_movieUrl(url):
     try:
@@ -57,4 +69,4 @@ if __name__ == '__main__':
 
     #for location in get_locations_from_movieID(gotID):
     #    print(location)
-    print(get_movie_from_movieID(gotID)['Title'])
+    print(get_top_rated_movieIDs())

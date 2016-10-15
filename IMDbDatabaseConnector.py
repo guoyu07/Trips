@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 import IMBb.py
 
-# a list of hardcoded movie ids.
-movieIDs = [
-'tt0944947',        # Game of Thrones
-]
+# a list of movie ids.
+movieIDs = IMBb.get_top_rated_movieIDs(50)
 
 
 # call this function to update the database
