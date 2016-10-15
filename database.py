@@ -1,4 +1,5 @@
 import peewee
+from peewee import *
 import skyscanner.py
 
 database = SqliteDatabase("database.db")
@@ -49,22 +50,22 @@ def add_trip(MovieID, locations, MovieName, home, date):
 		)
 
 	prev = home
-	for Location in locations:
-		temp = LocationTable.get_or_create(LocationTable.name=Location)
+	for location in locations:
+		temp = LocationTable.get_or_create(name=location)
 
 		Location_Relation = TripLocationRelation(
 			Trip = Trip,
 			Location = temp
 			)
-		prize = skyscanner.get_prize(prev, Location, date)
-		link = skyscanner.get_link(prev, Location, date)
+		prize = skyscanner.get_prize(prev, location, date)
+		link = skyscanner.get_link(prev, location, date)
 
-		Flight = FlightTable.get_or_create(origin = prev, destination = Location, date = date, link = link, prize = prize)
+		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, link = link, prize = prize)
 		Flight_Relation = TripFlightRelation(
 			Trip = Trip,
 			Flight = Flight
 			)
-		prev = Location
+		prev = location
 
 
 
