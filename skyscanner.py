@@ -7,7 +7,7 @@ API_KEY = 'ja134927235879517824145636024746'
 
 #http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/{market}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}?apiKey={apiKey}
 autosuggest = "http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/GB/USD/EN/?query={}&apiKey={}"
-browse_quotes = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/GB/USD/en-GB/{}/{}/{}/2017-02-15?apiKey={}"
+#browse_quotes = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/GB/USD/en-GB/{}/{}/{}/2017-02-15?apiKey={}"
 pricing = "http://partners.api.skyscanner.net/apiservices/pricing/v1.0"
 header = {"accept" : "application/json", "content-type" : "application/x-www-form-urlencoded"}
 
