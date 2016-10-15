@@ -19,6 +19,7 @@ def dateFormat(day, month, year):
 	
 def get_price(origin_query, destination_query, date_query):
 	# get origin and destination airport in dict
+
 	origin = json.loads(requests.get(autosuggest.format(origin_query, API_KEY)).text)
 	destination = json.loads(requests.get(autosuggest.format(destination_query, API_KEY)).text)
 
@@ -28,6 +29,7 @@ def get_price(origin_query, destination_query, date_query):
 
 	payload = {'apiKey' : API_KEY, 'country' : 'GB', 'currency': 'USD', 'locale' : 'EN', 'originplace' : origin_id, 'destinationplace' : destination_id, 'outbounddate' : date_query}
 	# get result
+	#import pdb; pdb.set_trace()
 	result = requests.post(pricing, json = payload, headers = header)
 	return result.json
 
