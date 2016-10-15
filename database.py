@@ -41,10 +41,10 @@ def create_tables():
 
 
 def add_trip(MovieID, locations, MovieName, home, date):
-	find_best_route(locations)
+	locations = find_best_route(locations)
 
 	Trip = TripTable (
-		MovieID = MovieID
+		MovieID = MovieID,
 		MovieName = MovieName
 		)
 
@@ -53,7 +53,7 @@ def add_trip(MovieID, locations, MovieName, home, date):
 		temp = LocationTable.get_or_create(LocationTable.name=Location)
 
 		Location_Relation = TripLocationRelation(
-			Trip = Trip
+			Trip = Trip,
 			Location = temp
 			)
 		prize = skyscanner.get_prize(prev, Location, date)
@@ -61,7 +61,7 @@ def add_trip(MovieID, locations, MovieName, home, date):
 
 		Flight = FlightTable.get_or_create(origin = prev, destination = Location, date = date, link = link, prize = prize)
 		Flight_Relation = TripFlightRelation(
-			Trip = Trip
+			Trip = Trip,
 			Flight = Flight
 			)
 		prev = Location
@@ -69,11 +69,33 @@ def add_trip(MovieID, locations, MovieName, home, date):
 
 
 def find_best_route(locations):
+	# populate dict
+	distance = {}
+	for i in locations:
+		distance[i] = {}
+		for j in locations:
+			if i == j:
+				distance[i][j] = 0
+			else:
+				distance[i][j] = skyscanner.get_prize(i, j)
+
+	d = lambda a,b:distance[a][b]
+
+	result = [locations[0], locations[1]]
+
+	for l in locations[2:]:
+		index = len(result)
+		for i in range(0, len(result-1)):
+			if d(locations[i], locations[i+1]) + d(locations[i+1], l) > \
+				d(locations[i], l) + d(l, locations[i+1]):
+				index = i+1
+		result.insert(i, l)
+	return result
 
 
 
-
-def add_flight()
+def add_flight():
+	pass
 
 if __name__ == '__main__':
 	# Connects the Database
