@@ -3,11 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 
 BASE_URL = 'http://www.imdb.com'
-SEARCH_URL = '/find?q={}&s=tt&ttype=tv&ref_=fn_tv'
+SEARCH_URL = '/find?ref_=nv_sr_fn&q={}'
 
 def get_search_url(searchAfter):
     searchAfter = searchAfter.lower()
-    searchAfter.replace(' ', '%20')
+    searchAfter.replace(' ', '+')
     return BASE_URL + SEARCH_URL.format(searchAfter)
 
 def search_movieIDs(searchAfter):
