@@ -9,6 +9,12 @@ API_KEY = "ja134927235879517824145636024746"
 autosuggest = "http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/ES/USD/EN/?query={}&apiKey={}"
 browse_quotes = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/ES/USD/en-GB/{}/{}/{}/2017-02-15?apiKey={}"
 
+
+# Formats the date to yyyy-mm-dd
+def dateFormat(day, month, year):
+	newstring = year + "-" + month + "-" + day
+	return newstring
+	
 def get_price(origin_query, destination_query, date_query):
 	# get origin and destination airport in dict
 	origin = json.loads(requests.get(autosuggest.format(origin_query, API_KEY)).text)
