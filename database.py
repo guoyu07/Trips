@@ -1,5 +1,6 @@
 import peewee
 from peewee import *
+import json
 
 import skyscanner
 
@@ -24,6 +25,8 @@ class FlightTable(BaseModel):
 class TripTable(BaseModel):
 	MovieID = IntegerField()
 	MovieName = CharField()
+	Poster = CharField()
+	Description = CharField()
 
 class TripFlightRelation(BaseModel):
 	Flight = ForeignKeyField(FlightTable)
@@ -41,20 +44,25 @@ def create_tables():
 	database.create_tables(tables)
 
 
-def add_trip(MovieID, locations, MovieName, home, date):
+def add_trip(MovieID, locations, MovieName, Poster, Description, home, date):
+
+	locations.insert(0, home)
 	#find best permutation
 	locations = find_best_route(locations, date)
-	print(locations)
+	#print(locations)
+	locations.append(home)
 
 	#create Trip object
 	Trip = TripTable (
 		MovieID = MovieID,
-		MovieName = MovieName
+		MovieName = MovieName,
+		Description = Description,
+		Poster = Poster
 		).save()
 
 	# iterate through best permutation and add flights, location objects
-	prev = home
-	for location in locations:
+	prev = locations[0]
+	for location in locations[1:]:
 		temp, created = LocationTable.get_or_create(name=location)
 
 		Location_Relation = TripLocationRelation(
@@ -72,13 +80,29 @@ def add_trip(MovieID, locations, MovieName, home, date):
 		prev = location
 
 	#add last flight home 
-	price = skyscanner.get_price(prev, home, date)
-	Flight, created = FlightTable.get_or_create(origin = prev, destination = home, date = date, price = price)
+	# price = skyscanner.get_price(prev, home, date)
+	# Flight, created = FlightTable.get_or_create(origin = prev, destination = home, date = date, price = price)
 
-	Flight_Relation = TripFlightRelation(
-			Trip = Trip,
-			Flight = Flight
-			).save()
+	# Flight_Relation = TripFlightRelation(
+	# 		Trip = Trip,
+	# 		Flight = Flight
+	# 		).save()
+
+
+def get_data():
+	data =[]
+	for trip in TripTable.select():
+		cur = {}
+		cur['Name'] = trip.MovieName
+		cur['Poster'] = trip.Poster
+		cur['Description'] = trip.Description
+		cur['Locations'] = [l.Location.name for l in TripLocationRelation.select().where(TripLocationRelation.Trip == trip)]
+		cur['Prices'] = [Flight.Flight.price for Flight in TripFlightRelation.select().where(TripFlightRelation.Trip == trip)]
+		cur['TotalPrice'] = sum(cur['Prices'])
+		data.append(cur)
+
+	return json.dumps(data, indent=4)
+
 
 
 
@@ -112,9 +136,11 @@ if __name__ == '__main__':
 	before_request_handler()
 
 	create_tables()
-	add_trip(1, ["New York", "Paris","Boston", "Barcelona"], "Lydia", "Berlin", "2017-02-02")
+	add_trip(1, ["New York", "Paris","Boston", "Barcelona"], "Lydia", "blabl", "asglkh", "Berlin", "2017-02-02")
 
-	after_request_hander()	
+	after_request_hander()
+
+	print(get_data())
 
 
 

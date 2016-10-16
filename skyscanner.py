@@ -2,6 +2,7 @@
 import random
 import requests
 import json
+import time
 
 API_KEY = open('token').read()
 
@@ -38,7 +39,7 @@ def get_price(origin_query, destination_query, date_query):
 			if successful:
 				return price
 
-	random.seed(1337)
-	return random.uniform(23, 237)
+	random.seed(time.time())
+	return random.randint(23, 1237)
 
-print(get_price("Vancouver", "Barcelona", "2017-02-02"))
+#print(get_price("Vancouver", "Barcelona", "2017-02-02"))
