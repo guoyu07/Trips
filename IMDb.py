@@ -50,8 +50,6 @@ def get_movie_from_movieID(mid):
     movie['Summary'] = get_summary_from_soup(soup)
     movie['Poster'] = get_poster_from_soup(soup)
 
-    print(json.dumps(movie, indent=4))
-
     return movie
 
 def get_url_from_movieID(mid):
