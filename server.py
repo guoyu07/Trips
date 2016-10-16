@@ -1,13 +1,28 @@
 from flask import Flask
 import IMDb
+#import IMDbDatabaseConnector
 import json
+import threading
+
 
 app = Flask(__name__)
 
+
+def update_database():
+    # update the database every 5 minutes
+    t = threading.Timer(300.0, update_database)
+    t.daemon = True
+    t.start()
+
+    #using this call (when fixed)
+    #IMDbDatabaseConnector.update()
+
 def movieIDs_To_Json(movieIDs):
-    movies = {}
+    movies = []
     for mid in movieIDs:
-        movies[mid] = IMDb.get_movie_from_movieID(mid)
+        movie = IMDb.get_movie_from_movieID(mid)
+        movie["Price"] = 27.38
+        movies.append(movie)
 
     return json.dumps(movies, indent=4)
 
@@ -25,6 +40,8 @@ def get_top_rated_movies(num):
     return movieIDs_To_Json(IMDb.get_top_rated_movieIDs(num))
 
 
-
-if __name__ == "__main__":
+started = False
+if __name__ == "__main__" and not started:
+    started = True
+    update_database()
     app.run()
