@@ -9,8 +9,8 @@ import json
 print("works until here")
  
 def main():
-    movie = "Lord of the rings the return of the king"
-    query =  movie + "Movie Poster"
+    movie = "harry potter"
+    query =  movie + " site:movieposter.com"
     print (query)
 
     #print bing_search(query, 'Web')
