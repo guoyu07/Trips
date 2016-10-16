@@ -23,7 +23,7 @@ class FlightTable(BaseModel):
 	price = IntegerField()
 
 class TripTable(BaseModel):
-	MovieID = IntegerField()
+	MovieID = CharField()
 	MovieName = CharField()
 	Poster = CharField()
 	Description = CharField()
@@ -48,9 +48,9 @@ def add_trip(MovieID, locations, MovieName, Poster, Description, home, date):
 
 	locations.insert(0, home)
 	#find best permutation
-	locations = find_best_route(locations, date)
+	#locations = find_best_route(locations, date)
 	#print(locations)
-	locations.append(home)
+	#locations.append(home)
 
 	#create Trip object
 	Trip = TripTable (

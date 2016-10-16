@@ -34,7 +34,7 @@ def search_movieIDs(searchAfter):
     result = requests.get(get_search_url(searchAfter))
     soup = BeautifulSoup(result.text, 'html.parser')
     resultEntries = soup.find('table', 'findList')('tr')
-    return [i('a')[0]['href'].split('/')[2] for i in resultEntries]
+    return [i('a')[0]['href'].split('/')[2].encode('ascii', 'ignore') for i in resultEntries]
 
 def get_movie_from_movieID(mid):
     url = BASE_URL + "/title/" + mid;
@@ -46,8 +46,8 @@ def get_movie_from_movieID(mid):
     result = requests.get(url)
     soup = BeautifulSoup(result.text, 'html.parser')
 
-    movie['Title'] = get_title_from_soup(soup)
-    movie['Summary'] = get_summary_from_soup(soup)
+    movie['Title'] = get_title_from_soup(soup).encode('ascii', 'ignore')
+    movie['Summary'] = get_summary_from_soup(soup).encode('ascii', 'ignore')
     movie['Poster'] = get_poster_from_soup(soup)
 
     return movie
@@ -78,7 +78,7 @@ def get_locations_from_movieUrl(url):
         result = requests.get(url)
         soup = BeautifulSoup(result.text, 'html.parser')
 
-        return [i.text[:-1] for i in soup.select('#filming_locations_content')[0]('a', itemprop='url')]
+        return [i.text[:-1].encode('ascii', 'ignore') for i in soup.select('#filming_locations_content')[0]('a', itemprop='url')]
     except Exception:
         return None
 

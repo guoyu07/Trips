@@ -7,13 +7,11 @@ import urllib2
 import json
  
 def main():
-    movie = "harry potter"
-    query =  movie + " site:movieposter.com"
-    print (query)
-
-    #print bing_search(query, 'Web'
+    query = "Amsterdam"
+    #print bing_search(query, 'Web')
+    print bing_search(query, 'Image')
  
-def bing_search(query):
+def bing_search(query, search_type):
     search_type = 'Image' 
     key= 'OnxQM0p1rgGWyKf5ShtHvpVuClj3eJcPVNENs1dzo8I'
     query = urllib.quote(query)

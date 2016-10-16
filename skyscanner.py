@@ -10,6 +10,8 @@ API_KEY = open('token').read()
 autosuggest = "http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/GB/USD/EN/?query={}&apiKey={}"
 browse_quotes = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/GB/USD/en-GB/{}/{}/{}?apiKey={}"
 
+
+
 # Formats the date to yyyy-mm-dd
 def dateFormat(day, month, year):
 	newstring = year + "-" + month + "-" + day
