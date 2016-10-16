@@ -5,7 +5,7 @@ import subprocess
 
 def init():
     movieIDs = IMDb.get_most_popular_movieIDs(30)
-    movieIDs += IMDb.get_top_rated_movieIDs(30)
+    #movieIDs += IMDb.get_top_rated_movieIDs(30)
 
     subprocess.call(['bash', 'clean.sh'])
 
