@@ -4,6 +4,8 @@ import IMDbDatabaseConnector
 import json
 import threading
 
+import random
+
 
 app = Flask(__name__)
 
@@ -20,7 +22,7 @@ def movieIDs_To_Json(movieIDs):
     movies = []
     for mid in movieIDs:
         movie = IMDb.get_movie_from_movieID(mid)
-        movie["Price"] = 27.38
+        movie["Price"] = random.uniform(57, 27638.6)
         movies.append(movie)
 
     return json.dumps(movies, indent=4)
