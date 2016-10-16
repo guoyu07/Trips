@@ -43,9 +43,8 @@ def create_tables():
 
 def add_trip(MovieID, locations, MovieName, home, date):
 	#find best permutation
-
-	## unsupported operand type(s) for -: 'list' and 'int' error
-	#locations = find_best_route(locations, date)
+	locations = find_best_route(locations, date)
+	print(locations)
 
 	#create Trip object
 	Trip = TripTable (
@@ -100,7 +99,7 @@ def find_best_route(locations, date):
 
 	for l in locations[2:]:
 		index = len(result)
-		for i in range(0, len(result-1)):
+		for i in range(0, len(result)-1):
 			if d(locations[i], locations[i+1]) + d(locations[i+1], l) > \
 				d(locations[i], l) + d(l, locations[i+1]):
 				index = i+1
@@ -113,7 +112,7 @@ if __name__ == '__main__':
 	before_request_handler()
 
 	create_tables()
-	add_trip(1, ["Barcelona", "Paris", "New York"], "Lydia", "Berlin", "2017-02-02")
+	add_trip(1, ["New York", "Paris","Boston", "Barcelona"], "Lydia", "Berlin", "2017-02-02")
 
 	after_request_hander()	
 
