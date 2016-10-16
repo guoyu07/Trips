@@ -1,7 +1,7 @@
-#!/usr/bin/python3
 import peewee
 from peewee import *
-import skyscanner.py
+
+import skyscanner
 
 database = SqliteDatabase("database.db")
 
@@ -43,7 +43,7 @@ def create_tables():
 
 
 def add_trip(MovieID, locations, MovieName, home, date):
-	locations = find_best_route(locations)
+	locations = find_best_route(locations, date)
 
 	Trip = TripTable (
 		MovieID = MovieID,
@@ -58,9 +58,9 @@ def add_trip(MovieID, locations, MovieName, home, date):
 			Trip = Trip,
 			Location = temp
 			)
-		prize = skyscanner.get_prize(prev, location, date)
+		price = skyscanner.get_price(prev, location, date)
 
-		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, link = link, prize = prize)
+		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, link = link, price = price)
 		Flight_Relation = TripFlightRelation(
 			Trip = Trip,
 			Flight = Flight
@@ -69,7 +69,7 @@ def add_trip(MovieID, locations, MovieName, home, date):
 
 
 
-def find_best_route(locations):
+def find_best_route(locations, date):
 	# populate dict
 	distance = {}
 	for i in locations:
@@ -78,7 +78,7 @@ def find_best_route(locations):
 			if i == j:
 				distance[i][j] = 0
 			else:
-				distance[i][j] = skyscanner.get_prize(i, j)
+				distance[i][j] = skyscanner.get_price(i, j, date)
 
 	d = lambda a,b:distance[a][b]
 
@@ -103,12 +103,9 @@ if __name__ == '__main__':
 	before_request_handler()
 
 	create_tables()
-	add_locations("Berlin")
-	add_locations("Lissabon")
-	add_locations("London")
-	add_locations("Paris")
-	add_locations("Madrid")
-	add_locations("Barcelona")
+	add_trip(1, ["Berlin", "Barcelona"], "Lydia", "Berlin", "2017-02-15")
+
+	after_request_hander()	
 
 
 
