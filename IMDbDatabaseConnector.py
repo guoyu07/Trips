@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import IMBb.py
+import IMBb
 
 # a list of movie ids.
 movieIDs = IMBb.get_top_rated_movieIDs(50)
