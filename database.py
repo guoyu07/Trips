@@ -13,7 +13,7 @@ def after_request_hander():
 
 class BaseModel(Model):
 	class Meta:
-		sqlitedb = database
+		database = database
 
 class FlightTable(BaseModel):
 	origin = CharField()
@@ -22,7 +22,7 @@ class FlightTable(BaseModel):
 	price = IntegerField()
 
 class TripTable(BaseModel):
-	MovieID = PrimaryKeyField()
+	MovieID = IntegerField()
 	MovieName = CharField()
 
 class TripFlightRelation(BaseModel):
@@ -52,7 +52,7 @@ def add_trip(MovieID, locations, MovieName, home, date):
 
 	prev = home
 	for location in locations:
-		temp = LocationTable.get_or_create(name=location)[0]
+		temp, created = LocationTable.get_or_create(name=location)
 
 		Location_Relation = TripLocationRelation(
 			Trip = Trip,
@@ -60,7 +60,7 @@ def add_trip(MovieID, locations, MovieName, home, date):
 			).save()
 		price = skyscanner.get_price(prev, location, date)
 
-		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, price = price)[0]
+		Flight, created = FlightTable.get_or_create(origin = prev, destination = location, date = date, price = price)
 
 		Flight_Relation = TripFlightRelation(
 			Trip = Trip,
