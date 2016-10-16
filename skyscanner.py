@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import random
 import requests
 import json
 
@@ -13,6 +13,13 @@ browse_quotes = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.
 def dateFormat(day, month, year):
 	newstring = year + "-" + month + "-" + day
 	return newstring
+
+def save_get(source, a, b):
+	if a in source:
+		temp = source[a]
+		if len(temp) > 0:
+			return (temp[0][b], True)
+	return (None, False)
 	
 def get_price(origin_query, destination_query, date_query):
 	# get origin and destination airport in dict
@@ -21,11 +28,17 @@ def get_price(origin_query, destination_query, date_query):
 	destination = json.loads(requests.get(autosuggest.format(destination_query, API_KEY)).text)
 
 	# get ids
-	origin_id = origin["Places"][0]['CityId']
-	destination_id = destination["Places"][0]['CityId']
+	origin_id, successful = save_get(origin, 'Places', 'CityId')
+	if successful:
+		destination_id, successful = save_get(destination, 'Places', 'CityId')
+		if successful:
+			# get result
+			result = json.loads(requests.get(browse_quotes.format(origin_id, destination_id, date_query, API_KEY)).text)
+			price, successful = save_get(result, "Quotes", "MinPrice")
+			if successful:
+				return price
 
-	# get result
-	result = json.loads(requests.get(browse_quotes.format(origin_id, destination_id, date_query, API_KEY)).text)
-	return result["Quotes"][0]["MinPrice"]
+	random.seed(1337)
+	return random.uniform(23, 237)
 
 print(get_price("Vancouver", "Barcelona", "2017-02-02"))

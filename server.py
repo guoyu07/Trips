@@ -1,6 +1,6 @@
 from flask import Flask
 import IMDb
-#import IMDbDatabaseConnector
+import IMDbDatabaseConnector
 import json
 import threading
 
@@ -14,8 +14,7 @@ def update_database():
     t.daemon = True
     t.start()
 
-    #using this call (when fixed)
-    #IMDbDatabaseConnector.update()
+    IMDbDatabaseConnector.update()
 
 def movieIDs_To_Json(movieIDs):
     movies = []
