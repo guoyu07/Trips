@@ -19,7 +19,6 @@ class FlightTable(BaseModel):
 	origin = CharField()
 	destination = CharField()
 	date = CharField()
-	link = CharField()
 	price = IntegerField()
 
 class TripTable(BaseModel):
@@ -44,27 +43,29 @@ def create_tables():
 
 def add_trip(MovieID, locations, MovieName, home, date):
 	locations = find_best_route(locations, date)
+	#print FlightTable.get_or_create.__doc__
 
 	Trip = TripTable (
 		MovieID = MovieID,
 		MovieName = MovieName
-		)
+		).save()
 
 	prev = home
 	for location in locations:
-		temp = LocationTable.get_or_create(name=location)
+		temp = LocationTable.get_or_create(name=location)[0]
 
 		Location_Relation = TripLocationRelation(
 			Trip = Trip,
 			Location = temp
-			)
+			).save()
 		price = skyscanner.get_price(prev, location, date)
 
-		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, link = link, price = price)
+		Flight = FlightTable.get_or_create(origin = prev, destination = location, date = date, price = price)[0]
+
 		Flight_Relation = TripFlightRelation(
 			Trip = Trip,
 			Flight = Flight
-			)
+			).save()
 		prev = location
 
 
@@ -94,16 +95,12 @@ def find_best_route(locations, date):
 	return result
 
 
-
-def add_flight():
-	pass
-
 if __name__ == '__main__':
 	# Connects the Database
 	before_request_handler()
 
 	create_tables()
-	add_trip(1, ["Berlin", "Barcelona"], "Lydia", "Berlin", "2017-02-15")
+	add_trip(1, ["Barcelona", "Berlin"], "Lydia", "Berlin", "2017-02-15")
 
 	after_request_hander()	
 
