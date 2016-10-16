@@ -40,7 +40,7 @@ def get_movie_from_movieID(mid):
     url = BASE_URL + "/title/" + mid;
     movie = {}
 
-    movie['Locations'] = get_locations_from_movieUrl(url)
+    movie['Locations'] = get_locations_from_movieUrl(url)[0:5]
     if movie['Locations'] == None: return {}
 
     result = requests.get(url)
