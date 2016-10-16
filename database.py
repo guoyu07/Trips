@@ -58,7 +58,8 @@ def add_trip(MovieID, locations, MovieName, Poster, Description, home, date):
 		MovieName = MovieName,
 		Description = Description,
 		Poster = Poster
-		).save()
+		)
+	Trip.save()
 
 	# iterate through best permutation and add flights, location objects
 	prev = locations[0]
@@ -68,7 +69,8 @@ def add_trip(MovieID, locations, MovieName, Poster, Description, home, date):
 		Location_Relation = TripLocationRelation(
 			Trip = Trip,
 			Location = temp
-			).save()
+			)
+		Location_Relation.save()
 		price = skyscanner.get_price(prev, location, date)
 
 		Flight, created = FlightTable.get_or_create(origin = prev, destination = location, date = date, price = price)
@@ -76,7 +78,8 @@ def add_trip(MovieID, locations, MovieName, Poster, Description, home, date):
 		Flight_Relation = TripFlightRelation(
 			Trip = Trip,
 			Flight = Flight
-			).save()
+			)
+		Flight_Relation.save()
 		prev = location
 
 	#add last flight home 
@@ -137,10 +140,11 @@ if __name__ == '__main__':
 
 	create_tables()
 	add_trip(1, ["New York", "Paris","Boston", "Barcelona"], "Lydia", "blabl", "asglkh", "Berlin", "2017-02-02")
+	add_trip(2, ["New Delhi", "Bombay","Ahmedabad", "Varanasi"], "Happy", "blabl", "asglkh", "Berlin", "2017-02-02")
 
 	after_request_hander()
 
-	print(get_data())
+	#print(get_data())
 
 
 
