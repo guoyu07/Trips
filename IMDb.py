@@ -59,10 +59,16 @@ def get_title_from_soup(soup):
     return soup.find('div', 'title_wrapper')('h1', itemprop='name')[0].text
 
 def get_summary_from_soup(soup):
-    return soup.select('#titleStoryLine')[0].find('div', 'inline canwrap')('p')[0].text
+    storyLine = soup.select('#titleStoryLine')
+    if len(storyLine) == 0: return ''
+    canwrap = storyLine[0].find('div', 'inline canwrap')
+    if canwrap == None: return ''
+    return canwrap('p')[0].text
 
 def get_poster_from_soup(soup):
-    return soup.find('div', 'poster')('a')[0]('img')[0]['src']
+    poster = soup.find('div', 'poster')
+    if poster == None: return ''
+    return poster('a')[0]('img')[0]['src']
 
 
 
