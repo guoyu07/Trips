@@ -28,8 +28,12 @@ def get_price(origin_query, destination_query, date_query):
 	result = json.loads(requests.get(browse_quotes.format(origin_id, destination_id, date_query, API_KEY)).text)
 	return result["Quotes"][0]["MinPrice"]
 
-
-#print(get_price("Toronto","Berlin", "2017-02-15"))
+#print(get_price("Berlin", "Tokyo", "2017-02-15"))
+# prev = "Berlin"
+# locations = ["Barcelona", "Berlin"]
+# for location in locations:
+# 	print(get_price(prev, location, "2017-02-15"))
+# 	prev = location
 
 # location_query = "Barcelona"
 # locations = json.loads(requests.get(autosuggest.format(location_query, API_KEY)).text)
